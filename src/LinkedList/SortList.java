@@ -13,88 +13,89 @@ import org.junit.Test;
  * 1 πÈ≤¢≈≈–Ú... <br/>
  */
 public class SortList {
-		public class ListNode {
-			int val;
-			ListNode next;
+		
+	public class ListNode {
+		int val;
+		ListNode next;
 
-			ListNode(int x) {
-				val = x;
-			}
+		ListNode(int x) {
+			val = x;
 		}
-	
-		
-	ListNode _sort(ListNode pre ,int len){ 
-
-		ListNode p1 = pre.next;
-		ListNode p2 = pre;
-		
-		int n1 = 0;
-		while(n1<len&&p2!=null) {
-			n1++;
-			p2 = p2.next;	
-		}
-		if(p2==null)
-			return null;
-		
-		int n2 = len;
-		p2 = p2.next;
-		
-		while(p1!=null&&n1>0&&p2!=null&&n2>0){
-			if (p1.val < p2.val) {
-				pre.next = p1;
-				pre = p1;
-				p1 = p1.next;
-				n1--;
-			} else {
-				pre.next = p2;
-				pre = p2;
-				p2 = p2.next;
-				n2--;
-			}
-		}
-	
-		while (p1 != null && n1>0) {
-			pre.next = p1;
-			pre = p1;
-			p1 = p1.next;
-			n1--;
-		}
-		
-		while (p2 != null && n2>0) {
-			pre.next = p2;
-			pre = p2;
-			p2 = p2.next;
-			n2--;
-		}
-		
-		pre.next=p2;
-		return pre;
 	}
-		
-
-	public ListNode sortList(ListNode head) {
-		int total = 0;
-		ListNode p = head;
-		while (p != null) {
-			total++;
-			p = p.next;
-		}
-
-		ListNode first = new ListNode(0);
-		first.next = head;
-
-		int len =1;
 	
-		while(len<total){
-			p =first;
-			do{
-				p = _sort(p, len);
-			}while(p!=null);
-			
-			len*=2;
-		}
-		return first.next;
-	}
+		
+//	ListNode _sort(ListNode pre ,int len){ 
+//
+//		ListNode p1 = pre.next;
+//		ListNode p2 = pre;
+//		
+//		int n1 = 0;
+//		while(n1<len&&p2!=null) {
+//			n1++;
+//			p2 = p2.next;	
+//		}
+//		if(p2==null)
+//			return null;
+//		
+//		int n2 = len;
+//		p2 = p2.next;
+//		
+//		while(p1!=null&&n1>0&&p2!=null&&n2>0){
+//			if (p1.val < p2.val) {
+//				pre.next = p1;
+//				pre = p1;
+//				p1 = p1.next;
+//				n1--;
+//			} else {
+//				pre.next = p2;
+//				pre = p2;
+//				p2 = p2.next;
+//				n2--;
+//			}
+//		}
+//	
+//		while (p1 != null && n1>0) {
+//			pre.next = p1;
+//			pre = p1;
+//			p1 = p1.next;
+//			n1--;
+//		}
+//		
+//		while (p2 != null && n2>0) {
+//			pre.next = p2;
+//			pre = p2;
+//			p2 = p2.next;
+//			n2--;
+//		}
+//		
+//		pre.next=p2;
+//		return pre;
+//	}
+//		
+//
+//	public ListNode sortList(ListNode head) {
+//		int total = 0;
+//		ListNode p = head;
+//		while (p != null) {
+//			total++;
+//			p = p.next;
+//		}
+//
+//		ListNode first = new ListNode(0);
+//		first.next = head;
+//
+//		int len =1;
+//	
+//		while(len<total){
+//			p =first;
+//			do{
+//				p = _sort(p, len);
+//			}while(p!=null);
+//			
+//			len*=2;
+//		}
+//		return first.next;
+//	}
 	  
 	  
 	  void print(ListNode head) {
@@ -123,5 +124,49 @@ public class SortList {
 			print(sortList(node1));
 
 		}
-	  
+
+		private  ListNode sortList(ListNode head) {
+			
+			if(head==null||head.next==null){
+				return head;
+			}
+			
+			ListNode pre = null,slow=head,fast=head;
+			while(fast!=null && fast.next!=null){
+				pre = slow;
+				slow = slow.next;
+				fast = fast.next.next;
+			}
+			
+			pre.next = null;
+			
+			return merge(sortList(head),sortList(slow));
+		}
+
+		private ListNode merge(ListNode p0, ListNode p1) {
+			
+			ListNode head = new ListNode(0),tail=head;
+			
+			while(p0!=null&&p1!=null){
+				if(p0.val<=p1.val){
+					tail.next = p0;
+					p0 = p0.next;
+				}else{
+					tail.next = p1;
+					p1 = p1.next;
+				}
+				tail = tail.next;
+			}
+			
+			if(p0!=null){
+				tail.next = p0;
+			}
+			
+			if(p1!=null){
+				tail.next = p1;
+			}
+			
+			return head;
+			
+		}
 }
