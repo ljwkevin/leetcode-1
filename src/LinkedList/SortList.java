@@ -166,7 +166,7 @@ public class SortList {
 				tail.next = p1;
 			}
 			
-			return head;
+			return head.next;
 			
 		}
 }
